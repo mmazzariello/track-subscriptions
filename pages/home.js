@@ -69,7 +69,11 @@ function Home({ session }) {
                   onClick={() => setIsShowingEditForm(true)}
                 />
                 {isShowingEditForm ? (
-                  <EditSubscriptionForm session={session} subscription={el} />
+                  <EditSubscriptionForm
+                    session={session}
+                    subscription={el}
+                    onRequestHide={() => setIsShowingEditForm(false)}
+                  />
                 ) : null}
                 <IconButton
                   aria-label=""

@@ -1,8 +1,20 @@
 import React, { useState } from "react";
 import { supabase } from "../utils/supabaseClient";
-import { Box, FormControl, FormLabel, Input, Button } from "@chakra-ui/react";
+import {
+  FormControl,
+  FormLabel,
+  Input,
+  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from "@chakra-ui/react";
 
-const EditSubscriptionForm = ({ session, subscription }) => {
+const EditSubscriptionForm = ({ session, subscription, onRequestHide }) => {
   const [amount, setAmount] = useState(subscription.amount);
   const [name, setName] = useState(subscription.name);
   const [description, setDescription] = useState(subscription.subscription);
@@ -25,67 +37,78 @@ const EditSubscriptionForm = ({ session, subscription }) => {
       });
   };
   return (
-    <Box>
-      <form onSubmit={(e) => e.preventDefault()}>
-        <FormControl>
-          <Input
-            value={amount}
-            type="number"
-            onChange={(e) => {
-              const newAmount = e.target.value;
-              setAmount(newAmount);
-            }}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Name</FormLabel>
-          <Input
-            type="text"
-            value={name}
-            onChange={(e) => {
-              const newName = e.target.value;
-              setName(newName);
-            }}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Description</FormLabel>
-          <Input
-            type="text"
-            value={description}
-            onChange={(e) => {
-              const newDescription = e.target.value;
-              setDescription(newDescription);
-            }}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Cycle</FormLabel>
-          <Input
-            type="number"
-            value={cycle}
-            onChange={(e) => {
-              const newCycle = e.target.value;
-              setCycle(newCycle);
-            }}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Duration</FormLabel>
-          <Input
-            type="number"
-            value={duration}
-            onChange={(e) => {
-              const newDuration = e.target.value;
-              setDuration(newDuration);
-            }}
-          />
-        </FormControl>
-        <Button type="submit" onClick={handleUpdateSubscription}>
-          Update
-        </Button>
-      </form>
-    </Box>
+    <Modal isOpen={true} onClose={onRequestHide}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Modal Title</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <FormControl>
+            <Input
+              value={amount}
+              type="number"
+              onChange={(e) => {
+                const newAmount = e.target.value;
+                setAmount(newAmount);
+              }}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Name</FormLabel>
+            <Input
+              type="text"
+              value={name}
+              onChange={(e) => {
+                const newName = e.target.value;
+                setName(newName);
+              }}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Description</FormLabel>
+            <Input
+              type="text"
+              value={description}
+              onChange={(e) => {
+                const newDescription = e.target.value;
+                setDescription(newDescription);
+              }}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Cycle</FormLabel>
+            <Input
+              type="number"
+              value={cycle}
+              onChange={(e) => {
+                const newCycle = e.target.value;
+                setCycle(newCycle);
+              }}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Duration</FormLabel>
+            <Input
+              type="number"
+              value={duration}
+              onChange={(e) => {
+                const newDuration = e.target.value;
+                setDuration(newDuration);
+              }}
+            />
+          </FormControl>
+        </ModalBody>
+
+        <ModalFooter>
+          <Button colorScheme="blue" mr={3} onClick={onRequestHide}>
+            Cancel
+          </Button>
+          <Button variant="ghost" onClick={handleUpdateSubscription}>
+            Update
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 };
 
