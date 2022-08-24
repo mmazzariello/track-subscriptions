@@ -12,6 +12,7 @@ function Home({ session }) {
   const [subscriptions, setSubscriptions] = useState([]);
   const [isShowingEditForm, setIsShowingEditForm] = useState(false);
   const [isShowingDeleteForm, setIsShowingDeleteForm] = useState(false);
+  const [totalAmount, setTotalAmount] = useState(false);
 
   useEffect(() => {
     const getSubscriptions = async () => {
@@ -19,25 +20,39 @@ function Home({ session }) {
       setSubscriptions(data);
     };
     getSubscriptions();
+    console.log(subscriptions);
   }, []);
 
+  useEffect(() => {
+    let totalAmountsPerMonth = 0;
+
+    subscriptions.map((el) => {
+      const amountEl = el.amount;
+      totalAmountsPerMonth += amountEl;
+    });
+
+    setTotalAmount(totalAmountsPerMonth);
+  }, [subscriptions]);
+
   return (
-    <Box>
-      <p>Add your subscription</p>
-      <Button
-        onClick={() => {
-          setIsShowingForm(true);
-        }}
-      >
-        +
-      </Button>
+    <Box display="flex" height="100vh" flexDirection="column">
+      <Box display="flex">
+        <p>Add your subscription</p>
+        <Button
+          onClick={() => {
+            setIsShowingForm(true);
+          }}
+        >
+          +
+        </Button>
+      </Box>
       {isShowingForm ? (
         <AddSubscriptionForm
           session={session}
           onRequestHide={() => setIsShowingForm(false)}
         />
       ) : null}
-      <Box>
+      <Box display="flex">
         {subscriptions.map((el) => {
           return (
             <Box
@@ -46,8 +61,9 @@ function Home({ session }) {
               borderColor="gray.100"
               overflow="hidden"
               minWidth="100px"
-              maxWidth={["200px", "200px", "300px", "300px"]}
+              width={["200px", "200px", "300px", "300px"]}
               minHeight="100px"
+              margin="4px"
               borderRadius="md"
               padding="4"
               display="flex"
@@ -94,6 +110,12 @@ function Home({ session }) {
             </Box>
           );
         })}
+      </Box>
+      <Box flexGrow="1"></Box>
+
+      <Box borderTop="1px" borderColor="gray.100" padding="4">
+        <Text>Average </Text>
+        <Text>Per month:{totalAmount}</Text>
       </Box>
     </Box>
   );
