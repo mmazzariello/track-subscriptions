@@ -31,7 +31,12 @@ function Home({ session }) {
       >
         +
       </Button>
-      {isShowingForm ? <AddSubscriptionForm session={session} /> : null}
+      {isShowingForm ? (
+        <AddSubscriptionForm
+          session={session}
+          onRequestHide={() => setIsShowingForm(false)}
+        />
+      ) : null}
       <Box>
         {subscriptions.map((el) => {
           return (

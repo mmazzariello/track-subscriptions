@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { supabase } from "../utils/supabaseClient";
 import { useRouter } from "next/router";
 
@@ -22,11 +22,4 @@ export default function Home() {
   }, []);
 
   return null;
-  // <div className="container" style={{ padding: "50px 0 100px 0" }}>
-  //   {!session ? (
-  //     <Auth />
-  //   ) : (
-  //     <Account session={session} />
-  //   )}
-  // </div>
 }
