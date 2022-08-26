@@ -16,7 +16,12 @@ import {
   Select,
 } from "@chakra-ui/react";
 
-const EditSubscriptionForm = ({ session, subscription, onRequestHide }) => {
+const EditSubscriptionForm = ({
+  session,
+  subscription,
+  onRequestHide,
+  onSaveSuccessfull,
+}) => {
   const [amount, setAmount] = useState(subscription.amount);
   const [name, setName] = useState(subscription.name);
   const [description, setDescription] = useState(subscription.description);
@@ -30,18 +35,22 @@ const EditSubscriptionForm = ({ session, subscription, onRequestHide }) => {
         name: name,
         description: description,
         cycle: cycle,
-
         user_id: session.user.id,
       })
       .match({
         id: subscription.id,
       });
+    if (!error) {
+      onRequestHide();
+      onSaveSuccessfull();
+    }
   };
+
   return (
     <Modal isOpen={true} onClose={onRequestHide}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Modal Title</ModalHeader>
+        <ModalHeader>Edit Subscription</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <FormControl>

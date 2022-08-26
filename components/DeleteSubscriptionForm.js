@@ -12,19 +12,29 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-const DeleteSubscriptionForm = ({ session, subscription, onRequestHide }) => {
+const DeleteSubscriptionForm = ({
+  session,
+  subscription,
+  onRequestHide,
+  onSaveSuccessfull,
+}) => {
   const handleDeleteSubscription = async () => {
     const { data, error } = await supabase
       .from("subscriptions")
       .delete()
       .match({ id: subscription.id, user_id: session.user.id });
+
+    if (!error) {
+      onRequestHide();
+      onSaveSuccessfull();
+    }
   };
 
   return (
     <Modal isOpen={true} onClose={onRequestHide}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Modal Title</ModalHeader>
+        <ModalHeader>Delete Subscription</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Text>Are you sure you want delete subscription?</Text>

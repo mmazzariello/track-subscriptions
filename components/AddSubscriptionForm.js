@@ -42,7 +42,7 @@ const AddSubscriptionForm = ({ session, onRequestHide, onSaveSuccessfull }) => {
     <Modal isOpen={true} onClose={onRequestHide}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Modal Title</ModalHeader>
+        <ModalHeader>Add Suscription</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <FormControl>

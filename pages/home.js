@@ -92,6 +92,7 @@ function Home({ session }) {
                     session={session}
                     subscription={el}
                     onRequestHide={() => setIsShowingEditForm(false)}
+                    onSaveSuccessfull={() => fetchSubscriptions()}
                   />
                 ) : null}
                 <IconButton
@@ -108,6 +109,7 @@ function Home({ session }) {
                   session={session}
                   subscription={el}
                   onRequestHide={() => setIsShowingDeleteForm(false)}
+                  onSaveSuccessfull={() => fetchSubscriptions()}
                 />
               ) : null}
             </Box>
