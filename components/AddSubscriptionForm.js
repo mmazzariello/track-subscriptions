@@ -13,14 +13,14 @@ import {
   ModalBody,
   ModalCloseButton,
   Text,
+  Select,
 } from "@chakra-ui/react";
 
-const AddSubscriptionForm = ({ session, onRequestHide }) => {
+const AddSubscriptionForm = ({ session, onRequestHide, onSaveSuccessfull }) => {
   const [amount, setAmount] = useState(0);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [cycle, setCycle] = useState(0);
-  const [duration, setDuration] = useState(0);
 
   const handleSave = useCallback(async () => {
     const { data, error } = await supabase.from("subscriptions").insert([
@@ -29,11 +29,14 @@ const AddSubscriptionForm = ({ session, onRequestHide }) => {
         name: name,
         description: description,
         cycle: cycle,
-        duration: duration,
         user_id: session.user.id,
       },
     ]);
-  }, [amount, name, description, cycle, duration, session.user.id]);
+    if (!error) {
+      onRequestHide();
+      onSaveSuccessfull();
+    }
+  }, [amount, name, description, cycle, session.user.id]);
 
   return (
     <Modal isOpen={true} onClose={onRequestHide}>
@@ -74,27 +77,20 @@ const AddSubscriptionForm = ({ session, onRequestHide }) => {
               }}
             />
           </FormControl>
+
           <FormControl>
             <FormLabel>Cycle</FormLabel>
-            <Input
-              type="number"
-              value={cycle}
+            <Select
+              placeholder="Select option"
               onChange={(e) => {
                 const newCycle = e.target.value;
+                console.log("new", newCycle);
                 setCycle(newCycle);
               }}
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel>Duration</FormLabel>
-            <Input
-              type="number"
-              value={duration}
-              onChange={(e) => {
-                const newDuration = e.target.value;
-                setDuration(newDuration);
-              }}
-            />
+            >
+              <option value="monthly">Monthly</option>
+              <option value="Yearly">Yearly</option>
+            </Select>
           </FormControl>
         </ModalBody>
 

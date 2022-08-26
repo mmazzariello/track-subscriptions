@@ -12,14 +12,15 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+  Text,
+  Select,
 } from "@chakra-ui/react";
 
 const EditSubscriptionForm = ({ session, subscription, onRequestHide }) => {
   const [amount, setAmount] = useState(subscription.amount);
   const [name, setName] = useState(subscription.name);
-  const [description, setDescription] = useState(subscription.subscription);
+  const [description, setDescription] = useState(subscription.description);
   const [cycle, setCycle] = useState(subscription.cycle);
-  const [duration, setDuration] = useState(subscription.duration);
 
   const handleUpdateSubscription = async () => {
     const { data, error } = await supabase
@@ -29,7 +30,7 @@ const EditSubscriptionForm = ({ session, subscription, onRequestHide }) => {
         name: name,
         description: description,
         cycle: cycle,
-        duration: duration,
+
         user_id: session.user.id,
       })
       .match({
@@ -75,27 +76,20 @@ const EditSubscriptionForm = ({ session, subscription, onRequestHide }) => {
               }}
             />
           </FormControl>
+
           <FormControl>
             <FormLabel>Cycle</FormLabel>
-            <Input
-              type="number"
-              value={cycle}
+            <Select
+              placeholder="Select option"
               onChange={(e) => {
                 const newCycle = e.target.value;
+                console.log("new", newCycle);
                 setCycle(newCycle);
               }}
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel>Duration</FormLabel>
-            <Input
-              type="number"
-              value={duration}
-              onChange={(e) => {
-                const newDuration = e.target.value;
-                setDuration(newDuration);
-              }}
-            />
+            >
+              <option value="monthly">Monthly</option>
+              <option value="Yearly">Yearly</option>
+            </Select>
           </FormControl>
         </ModalBody>
 

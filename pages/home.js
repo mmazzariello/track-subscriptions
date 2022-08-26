@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { withSession } from "../utils/withSession";
 import { Box, Button, Text, IconButton } from "@chakra-ui/react";
 import { supabase } from "../utils/supabaseClient";
@@ -14,13 +14,13 @@ function Home({ session }) {
   const [isShowingDeleteForm, setIsShowingDeleteForm] = useState(false);
   const [totalAmount, setTotalAmount] = useState(false);
 
+  const fetchSubscriptions = useCallback(async () => {
+    const { data, error } = await supabase.from("subscriptions").select();
+    setSubscriptions(data);
+  }, []);
+
   useEffect(() => {
-    const getSubscriptions = async () => {
-      const { data, error } = await supabase.from("subscriptions").select();
-      setSubscriptions(data);
-    };
-    getSubscriptions();
-    console.log(subscriptions);
+    fetchSubscriptions();
   }, []);
 
   useEffect(() => {
@@ -28,7 +28,9 @@ function Home({ session }) {
 
     subscriptions.map((el) => {
       const amountEl = el.amount;
-      totalAmountsPerMonth += amountEl;
+      if (el.cycle == "monthly") {
+        totalAmountsPerMonth += amountEl;
+      }
     });
 
     setTotalAmount(totalAmountsPerMonth);
@@ -50,6 +52,7 @@ function Home({ session }) {
         <AddSubscriptionForm
           session={session}
           onRequestHide={() => setIsShowingForm(false)}
+          onSaveSuccessfull={() => fetchSubscriptions()}
         />
       ) : null}
       <Box display="flex">
@@ -113,9 +116,21 @@ function Home({ session }) {
       </Box>
       <Box flexGrow="1"></Box>
 
-      <Box borderTop="1px" borderColor="gray.100" padding="4">
-        <Text>Average </Text>
-        <Text>Per month:{totalAmount}</Text>
+      <Box
+        borderTop="1px"
+        borderColor="gray.100"
+        padding="4"
+        display="flex"
+        flexDirection="column"
+        alignItems="flex-end"
+      >
+        <Text fontSize="xs" as="b" color="gray.700">
+          AVERAGE
+        </Text>
+        <Text fontSize="xs" color="gray.500">
+          PER MONTH:
+          <Text as="b"> {totalAmount}</Text>
+        </Text>
       </Box>
     </Box>
   );
